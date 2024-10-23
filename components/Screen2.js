@@ -1,46 +1,96 @@
-import { Text, View, StyleSheet, Image,SafeAreaView, TextInput, Pressable } from 'react-native';
-import {useState} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  TextInput,
+  Pressable,
+  FlatList,
+} from 'react-native';
+import { useState } from 'react';
+
+// Câu 02: (CLO3) Tạo màn hình như Screen 02 (6.5 Điểm). Chú ý: commit theo ý a,
+// b, c và d.
+// Yêu cầu: Tạo một mảng các object có chứa cấu trúc và thông tin cần thiết để thực hiện
+// logic nghiệp vụ như sau:
+// a. Khi người sử dụng chọn vào Smart Phone trên mục Categories thì List bên dưới
+// sẽ hiển thị các sản phẩm thuộc dòng Smart Phone.
+// b. Tương tự, nếu người sử dụng chọn vào Ipad hoặc MacBook trên mục Categories
+// thì List sẽ hiển thị các sản phẩm thuộc dòng Ipad hoặc MacBook tương ứng.
+// Các dòng sản phẩm này đều có Best Sales, Best Matched và Popular.
+// c. Mặc định hiển thị sẽ là Best Sales của dòng sản phẩm đã chọn ở trên, khi người
+// sử dụng nhấn vào Best Matched hoặc Popular thì các dòng sản phẩm tương ứng
+// sẽ hiển thị vào List.
+// d. Ban đầu List chỉ hiển thị 4 sản phẩm, nếu người sử dụng nhấn vào nút See all thì
+// tất cả các sản phẩm tương ứng sẽ hiển thị ra màn hình.
+
+const product = [
+  { id:1, loai: 'smartphone', ten: 'Smartphone1', anh: '../assets/1.png', best:'bestsale' },
+  { id:2,loai: 'smartphone', ten: 'Smartphone2', anh: '../assets/2.png', best:'bestsale' },
+  { id:3,loai: 'smartphone', ten: 'Smartphone3', anh: '../assets/3.png', best:'bestsale' },
+  { id:4,loai: 'smartphone', ten: 'Smartphone4', anh: '../assets/4.png', best:'bestsale' },
+  { id:5,loai: 'ipad', ten: 'Ipad', anh: '../assets/ipad.png', best:'popular' },
+  { id:6,loai: 'laptop', ten: 'Laptop', anh: '../assets/macbook.png',  best:'popular' },
+  { id:7,loai: 'smartphone', ten: 'Smartphone5', anh: '../assets/smart.png', best:'bestsale' },
+];
+export default function Screen2({ navigation }) {
+
+  const[selectedCategory,setSelectedCategory]=useState('smartphone');
+  const[selectedBest,setSelectedBest]=useState('bestsale');
+  const [showAll,setShowAll]=useState(false);
+
+  const filteredProduct= product.filter( (p)=> p.loai==selectedCategory && p.best==selectedBest);
+  const displayProduct= showAll ? filteredProduct: filteredProduct.slice(0,4);
 
 
-// Câu 01: (CLO3) Tạo màn hình như Screen 01 (3.5 điểm). Chú ý: commit theo ý tạo giao
-// diện và logic nghiệp vụ.
-// Yêu cầu: Tạo một mảng chứa 5 object {email, password}. Khi người dùng nhập vào email
-// và password vào ô tương ứng, sau đó nhấn Continue thì chương trình sẽ tìm trong mảng đã
-// tạo sẵn, nếu thông tin đúng theo yêu cầu thì sẽ cho phép người dùng chuyển sang Screen
-// 02
+  
 
-const o=[
-  {email: "a@gmail.com", passwordL:"usera"},
-  {email: "b@gmail.com", passwordL:"userb"},
-  {email: "c@gmail.com", passwordL:"userc"},
-  {email: "d@gmail.com", passwordL:"userd"},
-  {email: "e@gmail.com", passwordL:"usere"},
-]
-export default function Screen2({navigation}) {
-  const [email,setEmail]=useState('');
-  const [password,setPassword]=useState('');
-  const goToScreen2=()=>{
-    const foundUser=o.find(user => user.email ==email && user.password==password);
-    if(foundUser){
-      navigation.navigative('Screen2');
-    }else{
-      Alert.alert("Error","Sai mk hoac email");
-    }
-  }
+  const renderItem = ({item}) => (
+     <Text style={styles.paragraph}>{item.ten}</Text>
+  );
   return (
     <SafeAreaView style={styles.container}>
-        <Text style={styles.paragraph}>
-        Screen2
-      </Text>
-       <Image style={styles.logo} source={require('../assets/icon.png')} />
-      <TextInput placeholder="Enter your email address" />
-      <TextInput secureTextEntry={true} placeholder="Enter your password"/>
+      <View style={styles.cat}>
+        <Pressable onPress={()=>setSelectedCategory('smartphone')}>
+          <Image style={styles.logo} source={require('../assets/smart.png')} />
+        </Pressable>
 
-      <Pressable onPress={goToScreen2}>
-      <Text style={styles.paragraph}>
-        Continue
-      </Text>
-      </Pressable>
+        <Pressable onPress={()=>setSelectedCategory('ipad')}>
+          <Image style={styles.logo} source={require('../assets/ipad.png')} />
+        </Pressable>
+
+        <Pressable onPress={()=>setSelectedCategory('laptop')}>
+          <Image
+            style={styles.logo}
+            source={require('../assets/macbook.png')}
+          />
+        </Pressable>
+      </View>
+
+      <Pressable onPress={()=>setShowAll(true)}>
+          <Text style={styles.paragraph}>Show all</Text>
+        </Pressable>
+
+      <View style={styles.cat}>
+        <Pressable onPress={()=>setSelectedBest('bestsale')}>
+          <Text style={styles.paragraph}>Best Sales</Text>
+        </Pressable>
+        <Pressable onPress={()=>setSelectedBest('bestmatch')}>
+          <Text style={styles.paragraph}>Best Matched</Text>
+        </Pressable>
+
+        <Pressable>
+          <Text style={styles.paragraph} onPress={()=>setSelectedBest('popular')}>Popular</Text>
+        </Pressable>
+      </View>
+     
+     <FlatList
+        data={displayProduct}
+        keyExtractor={(item)=> item.id}
+        renderItem={renderItem}
+
+     />
     </SafeAreaView>
   );
 }
@@ -61,5 +111,8 @@ const styles = StyleSheet.create({
   logo: {
     height: 128,
     width: 128,
-  }
+  },
+  cat: {
+    flexDirection:'row',
+  },
 });
