@@ -38,42 +38,131 @@ export default function Screen1({ navigation }) {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.paragraph}>Back</Text>
-      <Image style={styles.logo} source={require('../assets/icon.png')} />
-      <TextInput
-        placeholder="Enter your email address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        secureTextEntry={true}
-        placeholder="Enter your password"
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.c1}>
+        <Text style={styles.paragraph}>Back</Text>
+      </View>
+      <View style={styles.c2}>
+         <Image style={styles.logo} source={require('../assets/icon.png')} />
+        <Text style={styles.textH}>Hello Again!</Text>
+        <Text style={styles.textL}>Log into your account</Text>
+      </View>
 
-      <Pressable onPress={goToScreen2}>
-        <Text style={styles.paragraph}>Continue</Text>
-      </Pressable>
+      <View style={styles.c2b}>
+         <View style={styles.input}>
+          <Image style={styles.icon} source={require('../assets/Vector.png')} />
+          <TextInput
+          style={styles.textInput}
+            placeholder="Enter your email address"
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={[styles.input, { justifyContent: 'space-between' }]}>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.icon} source={require('../assets/lock.png')} />
+            <TextInput
+              style={styles.textInput}
+              secureTextEntry={true}
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+
+          <Image style={styles.icon} source={require('../assets/eye.png')} />
+        </View>
+
+        <Pressable style={styles.buttonC} onPress={goToScreen2}>
+          <Text style={styles.textC}>Continue</Text>
+        </Pressable>
+      </View>
+
+
+       <View style={styles.c3}> 
+          <View style={styles.i3}>
+        <View style={styles.line}/>
+         <Text >or</Text>
+         <View style={styles.line}/>
+      </View>
+      <View style={styles.i3}>
+        <Image style={styles.icon} source={require('../assets/google.png')} />
+        <Image style={styles.icon} source={require('../assets/face.png')} />
+        <Image style={styles.icon} source={require('../assets/apple.png')} />
+      </View>
+       </View>
+      
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
     padding: 24,
   },
-  paragraph: {
-    margin: 24,
-    marginTop: 0,
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  c1: {
+    flex: 3,
+    alignItems: 'flex-start',
   },
-  logo: {
-    height: 128,
-    width: 128,
+  c2: {
+    flex: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
+  c2b: {
+    paddingTop:25,
+    flex: 6,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  c3: {
+   
+    flex:4,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  i3: {
+    justifyContent: 'center',
+    alignItems:'center',
+    flexDirection: 'row',
+    width:"70%"
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'black',
+  },
+  textH: {
+    fontSize: 30,
+    fontWeight: 700,
+  },
+  textL: {
+    fontSize: 15,
+    color: 'gray',
+  },
+  input: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 8,
+    height: 30,
+    width: '90%',
+  },
+  icon: {
+    marginHorizontal: 5,
+  },
+  buttonC: {
+    width: '90%',
+    backgroundColor: 'blue',
+    borderRadius: 8,
+    height: 30,
+    alignItems: 'center',
+  },
+  textC: {
+    color: 'white',
+    fontSize: 20,
+  },
+  textInput:{
+    outline:'none',
+  }
 });
